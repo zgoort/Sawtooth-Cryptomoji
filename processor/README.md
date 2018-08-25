@@ -30,7 +30,7 @@ As with the other components, npm is used to manage dependencies and extensive
 Mocha/Chai unit tests are provided to guide your efforts. To begin simply run:
 
 ```bash
-cd code/part-two/processor/
+cd processor/
 npm install
 npm test
 ```

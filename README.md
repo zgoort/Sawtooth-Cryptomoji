@@ -1,6 +1,6 @@
-# Part Two: Cryptomoji
+# Sawtooth Cryptomoji
 
-Your task for part two is to build a working distributed application on
+Your task for this project to build a working distributed application on
 [Hyperledger Sawtooth](https://www.hyperledger.org/projects/sawtooth), a
 general-purpose enterprise blockchain. This app will allow users to collect,
 breed, and trade collectible _kaomoji_: strings of characters that look like
@@ -18,7 +18,6 @@ instructions for your OS to set up the tools that you need to run
 - [Using Docker](#using-docker)
     * [Components](#components)
     * [Start/Stop Commands](#startstop-commands)
-    * [Entering a Container](#entering-a-container)
 - [The Curriculum](#the-curriculum)
     * [Sawtooth Documentation](#sawtooth-documentation)
     * [App Development Lecture](#app-development-lecture)
@@ -118,37 +117,6 @@ docker start processor
 docker restart processor
 ```
 
-### Entering a Container
-
-There is nothing in the curriculum that would require you to do this, but if
-you are curious, it is possible to _enter_ a running container if you want to
-run commands from that container. This is particularly useful with the "shell"
-container when you want to run
-[Sawtooth CLI](https://sawtooth.hyperledger.org/docs/core/releases/1.0/cli/sawtooth.html)
-commands. You would do this with `exec`, which allows you run any command from
-within a container, specifying `bash` as the command you want to run:
-
-```bash
-docker exec -it shell bash
-```
-
-An important note! When you are within a container, you cannot use "localhost"
-for networking. Remember how each container is like its own little computer?
-Well, it comes complete with its own localhost. For networking to _other_
-containers, Docker provides the service names from the compose file as URLs.
-For example, if you were inside the shell container and wanted to fetch the
-blocks from the REST API, you would run:
-
-```bash
-curl http://rest-api:8008/blocks
-```
-
-Finally, if you need to exit a container, simply use:
-
-```bash
-exit
-```
-
 ## The Curriculum
 
 ### Sawtooth Documentation
@@ -168,25 +136,9 @@ working with Javascript, start with these documents:
 
 ### App Development Lecture
 
-In addition to reviewing the official Sawtooth documentation, watch the
-Cryptomoji video lecture, which covers all the basics of Sawtooth application
-development in detail. It is broken into five parts, the first of which is a
-overview of blockchains generally, which you may have already watched in part
-one. Each part is available as an MP4 file:
-
-- [01a Blockchain Overview Lecture (MP4)](../../teaching/videos/01a_blockchain_lecture.mp4)
-- [01b Blockchain Overview Questions (MP4)](../../teaching/videos/01b_blockchain_qa.mp4)
-- [02 Sawtooth Overview (MP4)](../../teaching/videos/02_sawtooth_overview.mp4)
-- [03 Writing Transaction Processors (MP4)](../../teaching/videos/03_transaction_processors.mp4)
-- [04 Writing Clients (MP4)](../../teaching/videos/04_writing_clients.mp4)
-- [05 Sprint Design (MP4)](../../teaching/videos/05_sprint_design.mp4)
-
-The slides are also available in a variety of formats:
-
-- [Sawtooth App Development (Google Doc)](https://docs.google.com/presentation/d/1vRGIli6bgXP0FwdfZG7KrEIGS6apANnSCBk3Sg-5btc/edit?usp=sharing)
-- [Sawtooth App Development (PPTX)](../../teaching/slides/sawtooth_app_development.pptx)
-- [Sawtooth App Development (ODP)](../../teaching/slides/sawtooth_app_development.odp)
-- [Sawtooth App Development (PDF)](../../teaching/slides/sawtooth_app_development.pdf)
+In addition to reviewing the official Sawtooth documentation, you will watch a
+lecture which discusses permissioned blockchains, Sawtooth, app development,
+and the design for Cryptomoji in detail.
 
 ## The Project
 
@@ -225,22 +177,22 @@ For the broad transaction family design, continue reading [below](#the-design).
 
 ### Client
 
-**Directory:** [code/part-two/client/](client/)
+**Directory:** [client/](client/)
 
-**README:** [code/part-two/client/README.md](client/README.md)
+**README:** [client/README.md](client/README.md)
 
-**Tests:** [code/part-two/client/tests/](client/tests/)
+**Tests:** [client/tests/](client/tests/)
 
 A React/Webpack UI which allows users to create collections of cryptomoji,
 breed them, and (in the extra credit) trade with other users.
 
 ### Transaction Processor
 
-**Directory:** [code/part-two/processor/](processor/)
+**Directory:** [processor/](processor/)
 
-**README:** [code/part-two/processor/README.md](processor/README.md)
+**README:** [processor/README.md](processor/README.md)
 
-**Tests:** [code/part-two/processor/tests/](processor/tests/)
+**Tests:** [processor/tests/](processor/tests/)
 
 A Node.js process which validates payloads sent from the client, writing data
 permanently to the blockchain.
@@ -278,7 +230,9 @@ So your encoding should look something like this:
 Buffer.from(JSON.stringify(dataObj, getSortedKeys(dataObj)))
 ```
 
-And decoding would look like this:
+In this case `getSortedKeys` is a helper function you would write yourself,
+which would return the names of an object's properties sorted. Decoding would
+be much simpler:
 
 ```javascript
 JSON.parse(dataBytes.toString())
@@ -451,11 +405,17 @@ pseudo-random combination of the DNA from the breeder and the sire.
 
 ## Extra Credit
 
-For extra credit, add the capability for collections to trade cryptomoji
+At this point you should be familiar with the basics of writing a distributed
+application on Sawtooth. If you have extra time, you can dive into multi-party
+transactions by adding the capability for collections to trade cryptomoji
 between each other. This is harder than it sounds. One user will need to create
 an offer, while others add responses until the offer owner accepts them. This
 is a process that spans multiple transactions, never mind the possibility that
 one party might change their mind and decide to cancel an offer or response.
+
+To run a test which is "skipped", you must remove the `.skip` from the describe
+block surrounding the test in the `client/tests/` directory or
+`processor/tests/` directory.
 
 ### State Entities
 
