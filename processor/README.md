@@ -35,10 +35,9 @@ npm install
 npm test
 ```
 
-You will see a number of tests running, and even more getting skipped (those
-are for the extra credit). Most of those that are _not_ being skipped are
-**failing**. There is no UI for you to design and build here, so your job is as
-simple (or as complex) as getting these tests to pass.
+There are a number of tests to run, but the test runner will stop on the first
+failure. There is no UI to build here, so your entire job is to build out the
+transaction processor until you get all of the tests to pass one by one.
 
 In order to start up the full processor, run `docker-compose up` as detailed in
 the [Using Docker](../README.md#using-docker) section of the part-two README.
