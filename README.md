@@ -149,9 +149,9 @@ must consider how you can break up the functionality of your application into
 discrete transaction payloads, and how these payloads will alter state data.
 The typical Sawtooth workflow looks something like this:
 
-1. The user initializes some value (i.e., _"set 'a' to 1"_)
+1. The user initializes some action (i.e., _"set 'a' to 1"_)
 2. The _client_ takes that action and:
-    - encodes it in a payload (maybe simply `{"a": 1}`)
+    - encodes it in a payload (maybe simply `'{"a": 1}'`)
     - wraps that payload in a signed transaction and batch
     - submits it to the validator
 3. The validator confirms the transaction and batch are valid
@@ -159,16 +159,17 @@ The typical Sawtooth workflow looks something like this:
     - decodes it
     - verifies it is a valid action (i.e., 'a' _can_ be set to 1)
     - modifies state in a way that satisfies the action
-      (perhaps address _...000000a_ becomes `1`)
+      (perhaps the address _...000000a_ becomes `1`)
 5. Later, the client might read that state, and decode it for display
 
-So, you are responsible only for building two components (the client and the
-transaction processor) and for keeping those components in agreement on how to
+So, you are responsible only for building two components, the client and the
+transaction processor, and for keeping those components in agreement on how to
 encode payloads and state. This application-wide logic is typically referred to
 in Sawtooth with the term "transaction family".
 
 For Cryptomoji, the client and processor are each in their own directory, with
-their own tests and their own READMEs. You should develop the components in
+their own tests and their own READMEs. After completing the basic utilities in
+the `services/` directories, you should develop the client and processor in
 parallel on a feature-by-feature basis. For example, implement collection
 creation on _both_ the client and the processor before moving on to sire
 selection on _either_.
