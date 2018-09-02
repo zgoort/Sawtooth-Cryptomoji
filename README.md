@@ -26,33 +26,34 @@ instructions for your OS to set up the tools that you need to run
     * [Transaction Processor](#transaction-processor)
 - [The Design](#the-design)
     * [Encoding Data](#encoding-data)
-    * [State Entities](#state-entities)
-        - [Cryptomoji](#cryptomoji)
-        - [Collection](#collection)
-        - [Sire Listing](#sire-listing)
-    * [Addressing](#addressing)
-        - [Namespace](#namespace)
-        - [Resource Prefix](#resource-prefix)
-        - [Collection](#collection-1)
-        - [Collection Prefix](#collection-prefix)
-        - [Cryptomoji](#cryptomoji-1)
-        - [Sire Listing](#sire-listing-1)
-    * [Payloads](#payloads)
-        - [Create Collection](#create-collection)
-        - [Select Sire](#select-sire)
-        - [Breed Moji](#breed-moji)
+    * [Core Behavior (Parts 1-5)](#core-behavior-parts-1-5)
+        - [State Entities](#state-entities)
+            * [Cryptomoji](#cryptomoji)
+            * [Collection](#collection)
+            * [Sire Listing](#sire-listing)
+        - [Addressing](#addressing)
+            * [Namespace](#namespace)
+            * [Resource Prefix](#resource-prefix)
+            * [Collection](#collection-1)
+            * [Collection Prefix](#collection-prefix)
+            * [Cryptomoji](#cryptomoji-1)
+            * [Sire Listing](#sire-listing-1)
+        - [Payloads](#payloads)
+            * [Create Collection](#create-collection)
+            * [Select Sire](#select-sire)
+            * [Breed Moji](#breed-moji)
+    * [Moji Trading (Parts 6-9)](#moji-trading-parts-6-9)
+        - [State Entities](#state-entities)
+            * [Offer](#offer)
+        - [Addressing](#addressing-1)
+            * [Offer](#offer-1)
+        - [Payloads](#payloads-1)
+            * [Create Offer](#create-offer)
+            * [Add Response](#add-response)
+            * [Accept Response](#accept-response)
+            * [Cancel Offer](#cancel-offer)
+            * [Cancel Response](#cancel-response)
 - [Extra Credit](#extra-credit)
-    * [State Entities](#state-entities)
-        - [Offer](#offer)
-    * [Addressing](#addressing-1)
-        - [Offer](#offer-1)
-    * [Payloads](#payloads-1)
-        - [Create Offer](#create-offer)
-        - [Add Response](#add-response)
-        - [Accept Response](#accept-response)
-        - [Cancel Offer](#cancel-offer)
-        - [Cancel Response](#cancel-response)
-- [Nightmare Mode](#nightmare-mode)
 
 ## Using Docker
 
@@ -239,6 +240,13 @@ be much simpler:
 JSON.parse(dataBytes.toString())
 ```
 
+## Core Behavior (Parts 1-5)
+
+Over the first two days you will implement various utilities relating to
+signing and encoding, as well as build out the core behavior of your app:
+collections, moji, and breeding. The design for the state entities and
+transaction payloads to support this behavior is below.
+
 ### State Entities
 
 In order to make the Cryptomoji app work, your transaction processor must write
@@ -404,19 +412,20 @@ _Validation:_
 Creates a new cryptomoji for the owner of the _breeder_. The new cryptomoji is a
 pseudo-random combination of the DNA from the breeder and the sire.
 
-## Extra Credit
+## Moji Trading (Parts 6-9)
 
 At this point you should be familiar with the basics of writing a distributed
-application on Sawtooth. If you have extra time, you can dive into multi-party
-transactions by adding the capability for collections to trade cryptomoji
-between each other. This is harder than it sounds. One user will need to create
-an offer, while others add responses until the offer owner accepts them. This
-is a process that spans multiple transactions, never mind the possibility that
-one party might change their mind and decide to cancel an offer or response.
+application on Sawtooth. For the next two days, you will gain a deeper
+understanding by implementing multi-party transactions that add the capability
+for collections to trade cryptomoji between each other. This is harder than it
+sounds. One user will need to create an offer, while others add responses until
+the offer owner accepts them. This is a process that spans multiple
+transactions, never mind the possibility that one party might change their mind
+and decide to cancel an offer or response.
 
-To run a test which is "skipped", you must remove the `.skip` from the describe
-block surrounding the test in the `client/tests/` directory or
-`processor/tests/` directory.
+The tests for this section are set to pending. To run a test which is
+"skipped", you must remove the `.skip` from the describe block surrounding the
+test in the `client/tests/` directory and `processor/tests/` directory.
 
 ### State Entities
 
@@ -565,14 +574,19 @@ _Validation:_
 Deletes the response from the offer's list of responses, leaving `null` in its
 place.
 
-## Nightmare Mode
+## Extra Credit
 
-In the original Cryptokitties app on Ethereum, much was done using
-timestamps. After breeding, sires had a short period of downtime,
-during which they could not be used to sire again. Meanwhile, breeders had an
-exponentially increasing pregnancy time to create a child.
-Adding this gameplay feature to Cryptomoji will require that you understand and
-use Sawtooth's
+What features would you like to see added to your version of Cryptomoji? What
+improvements could you make to the existing features? Brainstorm ideas with
+your partner and pick 2-3 new features or optimizations you would like to
+tackle. Design and implement them.
+
+One possible suggestion, in the original Cryptokitties app on Ethereum, much
+was done using timestamps. After breeding, sires had a short period of
+downtime, during which they could not be used to sire again. Meanwhile,
+breeders had an exponentially increasing pregnancy time before they would
+create a child. Adding this gameplay feature to Cryptomoji will require that
+you understand and can use Sawtooth's
 [Block Info TP](https://sawtooth.hyperledger.org/docs/core/releases/1.0/transaction_family_specifications/blockinfo_transaction_family.html).
 
 Good luck.

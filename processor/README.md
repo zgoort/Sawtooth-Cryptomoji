@@ -22,7 +22,7 @@ contracts right on a Sawtooth blockchain.
     * [03 Create Collection](#03-create-collection)
     * [04 Select Sire](#04-select-sire)
     * [05 Breed Moji](#05-breed-moji)
-- [Extra Credit](#extra-credit)
+- [Moji Trading](#moji-trading)
 
 ## Getting Started and Running Tests
 
@@ -186,16 +186,16 @@ the signer has a collection, that the sire is listed appropriately, and that
 the breeder belongs to the signer. If so, create a new pseudo-random moji with
 genes based on its parents, and add it to the signer's collection.
 
-## Extra Credit
+## Moji Trading
 
 If you made it this far, congratulations! You've built a distributed
 application on Hyperledger Sawtooth. You should have a decent enough grasp of
-the fundamentals to start designing and building your own apps. However, if you
-wanted to go further and explore concepts like multi-party agreements and
-deleting state, there are a full suite of additional tests based around trading
-cryptomoji between collections. In order to run them you must remove the
-`.skip` from the wrapping describe block in each of the "ExtraCredit" tests in
-the [tests/](tests/) directory. Use these tests and the specs from the part-two
+the fundamentals to start designing and building your own apps. Over the next
+two days you will delve further and explore concepts like multi-party
+agreements and deleting state. There are a full suite of additional tests based
+around trading cryptomoji between collections. In order to run them you must
+remove the `.skip` from the wrapping describe block in modules 06 - 09 in the
+[tests/](tests/) directory. Use these tests and the specs from the part-two
 README to guide your implementation:
 
 - [Create Offer](../README.md#create-offer)
