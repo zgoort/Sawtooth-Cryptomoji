@@ -1,3 +1,9 @@
+import * as secp256k1 from 'secp256k1';
+import { randomBytes, createHash } from 'crypto';
+
+const sha256 = msg => createHash('sha256').update(msg).digest();
+const toBytes = hex => Buffer.from(hex, 'hex');
+
 /**
  * A function that takes an object and returns it encoded as a JSON Buffer.
  * Should work identically to the processor version. Feel free to copy and
@@ -16,6 +22,13 @@
 export const encode = object => {
   // Enter your solution here
 
+    console.log("WE GOT AN OBJECT TO ENCODE: ", object);
+    console.log("STRINGIFY THE OBJ: ", JSON.stringify(object));
+    console.log("SORT THE OBJ: ", JSON.stringify(object, Object.keys(object).sort()));
+    console.log("BUFFER THE SORTED OBJ: ", Buffer.from(JSON.stringify(object, Object.keys(object).sort())));
+
+    return Buffer.from(JSON.stringify(object, Object.keys(object).sort()));
+
 };
 
 /**
@@ -29,5 +42,14 @@ export const encode = object => {
  */
 export const decode = base64Str => {
   // Your code here
+    console.log("received data to decode ", typeof  base64Str);
+    console.log("received data to decode ", base64Str);
+
+    const buffer = Buffer.from(base64Str, 'base64');
+    console.log("data to encode as buffer: ", buffer);
+    const jsonObj = JSON.parse(buffer.toString());
+    console.log("JSON DECODED OBJ: ", jsonObj);
+
+    return jsonObj;
 
 };

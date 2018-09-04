@@ -10,9 +10,11 @@ import { getPublicKey, sign } from './signing.js';
 import { encode } from './encoding.js';
 
 
+
 const FAMILY_NAME = 'cryptomoji';
 const FAMILY_VERSION = '0.1';
 const NAMESPACE = '5f4d76';
+const getNonce = () => (Math.random() * 10 ** 18).toString(36);
 
 /**
  * A function that takes a private key and a payload and returns a new
@@ -29,7 +31,41 @@ const NAMESPACE = '5f4d76';
  */
 export const createTransaction = (privateKey, payload) => {
   // Enter your solution here
+   const encodedPayload = encode(payload);
+   console.log("Encodepayload" , encodedPayload);
 
+const pk=getPublicKey(privateKey);
+console.log("public key from private" , pk);
+  const transactionPayload={
+    familyName: 'cryptomoji',
+    familyVersion: '0.1',
+    inputs: ['5f4d76'],
+    outputs: ['5f4d76'],
+    signerPublicKey: pk,
+    // In this example, we're signing the batch with the same private key,
+    // but the batch can be signed by another party, in which case, the
+    // public key will need to be associated with that key.
+    batcherPublicKey: pk,
+    // In this example, there are no dependencies.  This list should include
+    // an previous transaction header signatures that must be applied for
+    // this transaction to successfully commit.
+    // For example,
+    // dependencies: ['540a6803971d1880ec73a96cb97815a95d374cbad5d865925e5aa0432fcf1931539afe10310c122c5eaae15df61236079abbf4f258889359c4d175516934484a'],
+    dependencies: [],
+    nonce:getNonce(),
+    payloadSha512: createHash('sha512').update(encodedPayload).digest('hex')
+}
+ 
+  console.log("Transctionpayload" , transactionPayload);
+  const header = TransactionHeader.encode(transactionPayload).finish();
+
+
+  console.log("TransctionpayHeader" , header);
+  return Transaction.create({
+    header,
+    headerSignature: sign(privateKey, header),
+    payload: encodedPayload
+  });
 };
 
 /**
@@ -41,7 +77,28 @@ export const createTransaction = (privateKey, payload) => {
  */
 export const createBatch = (privateKey, transactions) => {
   // Your code here
+  const signerPublicKey=getPublicKey(privateKey);
+  if (!Array.isArray (transactions)) {
+       transactions=[transactions]
+  }
+     
+     const transactionIds=transactions.map(t=>t.headerSignature);
 
+     const batchHeader={
+      signerPublicKey,
+      transactionIds
+     }
+
+const header=BatchHeader.encode(batchHeader).finish();
+
+const headerSignature=sign(privateKey,header);
+
+return Batch.create({
+header:header,
+headerSignature:headerSignature,
+transactions:transactions
+
+});
 };
 
 /**
@@ -75,4 +132,12 @@ export const encodeBatches = batches => {
 export const encodeAll = (privateKey, payloads) => {
   // Your code here
 
+if (!Array.isArray(payloads)) {
+   payloads=[payloads];
+}
+
+const transactions=payloads.map(p=>createTransaction(privateKey,p));
+const batch=createBatch(privateKey,transactions);
+
+return encodeBatches(batch);
 };
